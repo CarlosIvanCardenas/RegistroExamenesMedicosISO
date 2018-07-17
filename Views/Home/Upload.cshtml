@@ -1,0 +1,109 @@
+﻿@model ExamenesMedicos.Models.UploadModel
+@{
+    ViewData["Title"] = "Subir Documento";
+}
+
+<style>
+    body {
+        font-family: Roboto, sans-serif;
+    }
+
+    body.dragging::before {
+        content: "Arrastre el archivo a cualquier parte de la pagina.";
+        position: fixed;
+        left: 0; width: 100%;
+        top: 0; height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5em;
+        background-color: rgba(255, 255, 0, .3);
+        pointer-events: none;
+    }
+
+    button, input {
+        font-family: inherit;
+    }
+
+    a {
+        color: blue;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header clearfix detailHeading">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+<br/>
+<div class="container">
+    <div class="jumbotron" style="padding-bottom:8%">
+        <h3>Detalles: </h3>
+        <br>
+        <form method="post" enctype="multipart/form-data" class="form-inline">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="tipoFormato">Tipo de Formato: </label>
+                    <select id="tipoFormato" asp-for="Tipo" class="custom-select" style="width: 100%" required>
+                        <option value="" disabled selected>Selecciona el tipo de formato</option>
+                        <option value="ExamenMedicoAnual">Examen Medico Anual</option>
+                        <option value="ExamenVibraciones">Examen de Vibraciones</option>
+                        <option value="ExamenMedicoIngreso">Examen Medico Ingreso</option>
+                        <option value="ExamenVisual">Examen Visual</option>
+                        <option value="ExamenMedicoCargas">Examen Medico Cargas</option>
+                        <option value="Audiometria">Audiometria</option>
+                        <option value="ExamenAntialcohol">Antialcohol</option>
+                        <option value="ExamenAntidoping">Antidoping</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="fichaEmpleado">FichaEmpleado: </label>
+                    <input id="fichaEmpleado" asp-for="FichaEmpleado" type="text" class="form-control" style="width:100%" placeholder="Ingrese ficha de empleado" required>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="File">Seleccione Documento: </label>
+                    <input type="file" asp-for="File" class="form-control-file" required/>
+                </div>    
+            </div>
+            <div class="clearfix"></div>
+            <br>
+            <div class="form-group col-md-12">
+                <div style="text-align: center;" >
+                    <button type="submit" class="btn btn-block btn-warning">Guardar</button>
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var select = document.getElementById("tipoFormato");
+    var value = select.options[e.selectedIndex].value;
+    
+    
+    
+    let target = document.documentElement;
+    let body = document.body;
+    let fileInput = document.getElementById("File");
+
+    target.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        body.classList.add('dragging');
+    });
+
+    target.addEventListener('dragleave', () => {
+        body.classList.remove('dragging');
+    });
+
+    target.addEventListener('drop', (e) => {
+        e.preventDefault();
+        body.classList.remove('dragging');
+  
+        fileInput.files = e.dataTransfer.files;
+    });
+</script>

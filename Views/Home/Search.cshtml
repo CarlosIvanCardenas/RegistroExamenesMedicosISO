@@ -1,0 +1,53 @@
+﻿@model ExamenesMedicos.Models.UploadModel
+@{
+    ViewData["Title"] = "Buscar Documento";
+}
+
+<div class="container">
+    <div class="page-header clearfix detailHeading">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+<br/>
+<div class="container">
+    <div class="jumbotron" style="padding-bottom:8%">
+        <h3>Detalles: </h3>
+        <br>
+        <form method="post" enctype="multipart/form-data" class="form-inline">
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="tipoFormato">Tipo de Formato: </label>
+                    <select id="tipoFormato" asp-for="Tipo" class="custom-select" style="width: 100%" required>
+                        <option value="" disabled selected>Selecciona el tipo de formato</option>
+                        <option value="ExamenMedicoAnual">Examen Medico Anual</option>
+                        <option value="ExamenVibraciones">Examen de Vibraciones</option>
+                        <option value="ExamenMedicoIngreso">Examen Medico Ingreso</option>
+                        <option value="ExamenVisual">Examen Visual</option>
+                        <option value="ExamenMedicoCargas">Examen Medico Cargas</option>
+                        <option value="Audiometria">Audiometria</option>
+                        <option value="ExamenAntialcohol">Antialcohol</option>
+                        <option value="ExamenAntidoping">Antidoping</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="fecha">Fecha: </label>
+                    <br/>
+                    <input id="fecha" type="date" value='@DateTime.Today.ToString("yyyy-MM-dd")' class="form-control">
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="fichaEmpleado">FichaEmpleado: </label>
+                    <input id="fichaEmpleado" asp-for="FichaEmpleado" type="text" class="form-control" style="width:100%" placeholder="Ingrese ficha de empleado" required>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br>
+            <div class="form-group col-md-12">
+                <center>
+                    <button type="submit" class="btn btn-block btn-warning">Guardar</button>
+                </center>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+

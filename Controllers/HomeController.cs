@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
+using ExamenesMedicos.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
 
-namespace WebApplication1.Controllers
+namespace ExamenesMedicos.Controllers
 {
     public class HomeController : Controller
     {
@@ -15,17 +14,35 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Upload()
         {
-            ViewData["Message"] = "Your application description page.";
-
+            
             return View();
         }
 
-        public IActionResult Contact()
+        [HttpPost]
+        public async Task<IActionResult> Upload(UploadModel model)
         {
-            ViewData["Message"] = "Your contact page.";
+            if (model.File == null || model.File.Length == 0)
+                return Content("file not selected");
+            var date = DateTime.Today.ToString("dd-MM-yyyy");
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(), $"wwwroot/docs/{model.Tipo}");
+            var fileName = $"{model.Tipo}_{date}_{model.FichaEmpleado}{Path.GetExtension(model.File.FileName)}";
 
+            Directory.CreateDirectory(path);
+
+            using (var stream = new FileStream(Path.Combine(path,fileName), FileMode.Create))
+            {
+                await model.File.CopyToAsync(stream);
+            }
+
+            return RedirectToAction("Upload");
+        }
+
+
+        public IActionResult Search()
+        {
             return View();
         }
 
