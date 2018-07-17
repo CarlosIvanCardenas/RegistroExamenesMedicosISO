@@ -44,7 +44,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="tipoFormato">Tipo de Formato: </label>
-                    <select id="tipoFormato" asp-for="Tipo" class="custom-select" style="width: 100%" required>
+                    <select id="tipoFormato" asp-for="Tipo" onchange="CheckTipo()" class="custom-select" style="width: 100%" required>
                         <option value="" disabled selected>Selecciona el tipo de formato</option>
                         <option value="ExamenMedicoAnual">Examen Medico Anual</option>
                         <option value="ExamenVibraciones">Examen de Vibraciones</option>
@@ -65,8 +65,8 @@
             <br>
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label for="File">Seleccione Documento: </label>
-                    <input type="file" asp-for="File" class="form-control-file" required/>
+                    <label for="file">Seleccione Documento: </label>
+                    <input id="file" type="file" asp-for="File" class="form-control-file" required/>
                 </div>    
             </div>
             <div class="clearfix"></div>
@@ -82,14 +82,10 @@
 </div>
 
 <script type="text/javascript">
-    var select = document.getElementById("tipoFormato");
-    var value = select.options[e.selectedIndex].value;
-    
-    
     
     let target = document.documentElement;
     let body = document.body;
-    let fileInput = document.getElementById("File");
+    let fileInput = document.getElementById("file");
 
     target.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -103,7 +99,19 @@
     target.addEventListener('drop', (e) => {
         e.preventDefault();
         body.classList.remove('dragging');
-  
+    
         fileInput.files = e.dataTransfer.files;
     });
+    
+    function CheckTipo() {
+        let select = document.getElementById("tipoFormato");
+        let value = select.options[select.selectedIndex].value;
+        let ficha = document.getElementById("fichaEmpleado");
+        console.log(value);
+        if (value == "ExamenMedicoAnual") {
+            ficha.disabled = true;
+        } else {
+            ficha.disabled = false;
+        }
+    }
 </script>

@@ -1,4 +1,4 @@
-﻿@model ExamenesMedicos.Models.UploadModel
+﻿@model ExamenesMedicos.Models.SearchModel
 @{
     ViewData["Title"] = "Buscar Documento";
 }
@@ -13,11 +13,11 @@
     <div class="jumbotron" style="padding-bottom:8%">
         <h3>Detalles: </h3>
         <br>
-        <form method="post" enctype="multipart/form-data" class="form-inline">
+        <form method="post" id="searchForm" enctype="multipart/form-data" class="form-inline">
             <div class="form-row">
                 <div class="form-group col-md-5">
                     <label for="tipoFormato">Tipo de Formato: </label>
-                    <select id="tipoFormato" asp-for="Tipo" class="custom-select" style="width: 100%" required>
+                    <select id="tipoFormato" asp-for="Tipo" onchange="CheckTipo()" class="custom-select" style="width: 100%" required>
                         <option value="" disabled selected>Selecciona el tipo de formato</option>
                         <option value="ExamenMedicoAnual">Examen Medico Anual</option>
                         <option value="ExamenVibraciones">Examen de Vibraciones</option>
@@ -32,7 +32,7 @@
                 <div class="form-group col-md-2">
                     <label for="fecha">Fecha: </label>
                     <br/>
-                    <input id="fecha" type="date" value='@DateTime.Today.ToString("yyyy-MM-dd")' class="form-control">
+                    <input id="fecha" asp-for="Fecha" type="date" value='@DateTime.Today.ToString("yyyy-MM-dd")' class="form-control">
                 </div>
                 <div class="form-group col-md-5">
                     <label for="fichaEmpleado">FichaEmpleado: </label>
@@ -42,12 +42,46 @@
             <div class="clearfix"></div>
             <br>
             <div class="form-group col-md-12">
-                <center>
-                    <button type="submit" class="btn btn-block btn-warning">Guardar</button>
-                </center>
+                <div style="text-align: center;" >
+                    <button type="submit" class="btn btn-block btn-warning">Buscar</button>
+                </div>
             </div>
             @Html.AntiForgeryToken()
         </form>
+        
+        <div id="SearchResult" ></div>
+        
     </div>
 </div>
 
+<script type="text/javascript">
+    function CheckTipo() {
+        let select = document.getElementById("tipoFormato");
+        let value = select.options[select.selectedIndex].value;
+        let ficha = document.getElementById("fichaEmpleado");
+        console.log(value);
+        if (value == "ExamenMedicoAnual") {
+            ficha.disabled = true;
+        } else {
+            ficha.disabled = false;
+        }
+    }
+</script>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').submit(function() {
+                $.ajax({
+                    method: "POST",
+                    url: "/Home/_SearchResult",
+                    data: $(this).serialize(),
+                    success: function(result) {
+                        $('#SearchResult').html(result);
+                    }
+                });
+            });
+        });
+    </script>
+}

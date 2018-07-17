@@ -28,7 +28,8 @@ namespace ExamenesMedicos.Controllers
             var date = DateTime.Today.ToString("dd-MM-yyyy");
             var path = Path.Combine(
                 Directory.GetCurrentDirectory(), $"wwwroot/docs/{model.Tipo}");
-            var fileName = $"{model.Tipo}_{date}_{model.FichaEmpleado}{Path.GetExtension(model.File.FileName)}";
+            var ficha = model.FichaEmpleado == null ? "" : $"_{model.FichaEmpleado}";
+            var fileName = $"{model.Tipo}_{date}{ficha}{Path.GetExtension(model.File.FileName)}";
 
             Directory.CreateDirectory(path);
 
@@ -44,6 +45,29 @@ namespace ExamenesMedicos.Controllers
         public IActionResult Search()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(SearchModel model)
+        {
+            return View(model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Download(SearchModel model)
+        {
+            var ficha = model.FichaEmpleado == null ? "" : $"_{model.FichaEmpleado}";
+            var fileName = $"{model.Tipo}_{model.Fecha:dd-MM-yyyy}{ficha}";
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/docs/{model.Tipo}", fileName);
+            
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "APPLICATION/octet-stream", path);
         }
 
         public IActionResult Error()
