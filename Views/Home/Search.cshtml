@@ -1,4 +1,5 @@
-﻿@model ExamenesMedicos.Models.SearchModel
+﻿@using System.Collections
+@model ExamenesMedicos.Models.SearchModel
 @{
     ViewData["Title"] = "Buscar Documento";
 }
@@ -17,17 +18,7 @@
             <div class="form-row">
                 <div class="form-group col-md-5">
                     <label for="tipoFormato">Tipo de Formato: </label>
-                    <select id="tipoFormato" asp-for="Tipo" onchange="CheckTipo()" class="custom-select" style="width: 100%" required>
-                        <option value="" disabled selected>Selecciona el tipo de formato</option>
-                        <option value="ExamenMedicoAnual">Examen Medico Anual</option>
-                        <option value="ExamenVibraciones">Examen de Vibraciones</option>
-                        <option value="ExamenMedicoIngreso">Examen Medico Ingreso</option>
-                        <option value="ExamenVisual">Examen Visual</option>
-                        <option value="ExamenMedicoCargas">Examen Medico Cargas</option>
-                        <option value="Audiometria">Audiometria</option>
-                        <option value="ExamenAntialcohol">Antialcohol</option>
-                        <option value="ExamenAntidoping">Antidoping</option>
-                    </select>
+                    <select id="tipoFormato" asp-for="IdType" asp-items="@Model.ItemsType" onchange="CheckTipo()" class="form-control" style="width: 100%" required></select>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="fecha">Fecha: </label>
@@ -35,7 +26,7 @@
                     <input id="fecha" asp-for="Fecha" type="date" value='@DateTime.Today.ToString("yyyy-MM-dd")' class="form-control">
                 </div>
                 <div class="form-group col-md-5">
-                    <label for="fichaEmpleado">FichaEmpleado: </label>
+                    <label for="fichaEmpleado">Ficha Empleado: </label>
                     <input id="fichaEmpleado" asp-for="FichaEmpleado" type="text" class="form-control" style="width:100%" placeholder="Ingrese ficha de empleado" required>
                 </div>
             </div>
@@ -48,19 +39,24 @@
             </div>
             @Html.AntiForgeryToken()
         </form>
-        
-        <div id="SearchResult" ></div>
-        
+        @{
+            if (Model.Files != null)
+            {
+                await Html.RenderPartialAsync("_SearchResults", Model.Files);
+            }
+        }
+       
     </div>
 </div>
 
 <script type="text/javascript">
+    CheckTipo();
     function CheckTipo() {
         let select = document.getElementById("tipoFormato");
         let value = select.options[select.selectedIndex].value;
         let ficha = document.getElementById("fichaEmpleado");
         console.log(value);
-        if (value == "ExamenMedicoAnual") {
+        if (value == "1") {
             ficha.disabled = true;
         } else {
             ficha.disabled = false;
@@ -68,20 +64,3 @@
     }
 </script>
 
-@section Scripts
-{
-    <script>
-        $(document).ready(function() {
-            $('#searchForm').submit(function() {
-                $.ajax({
-                    method: "POST",
-                    url: "/Home/_SearchResult",
-                    data: $(this).serialize(),
-                    success: function(result) {
-                        $('#SearchResult').html(result);
-                    }
-                });
-            });
-        });
-    </script>
-}

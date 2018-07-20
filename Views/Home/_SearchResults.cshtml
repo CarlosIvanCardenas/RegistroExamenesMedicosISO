@@ -1,0 +1,30 @@
+﻿@using System.IO
+@model List<ExamenesMedicos.Models.File>
+@{
+    Layout = null;
+}
+
+<br/>
+<br/>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Archivo</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var f in Model)
+    {
+        <tr>
+            <td>@f.FileName</td>
+            <td>
+                <a href="@Url.Action("Download", "Home", new {path = f.Path, name = f.FileName})">
+                    <input type="button" value="Descargar" class="btn btn-sm btn-primary"/>
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace ExamenesMedicos.Models
 {
     public class UploadModel
     {
-        public string Tipo { get; set; }
+        public List<SelectListItem> ItemsType { get; set; }
+        public int IdType { get; set; }
         public string FichaEmpleado { get; set; }
         public IFormFile File { get; set; }
     }

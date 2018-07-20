@@ -1,11 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExamenesMedicos.Models
 {
     public class SearchModel
     {
-        public string Tipo { get; set; }
+        public List<SelectListItem> ItemsType { get; set; }
+        public int IdType { get; set; }
         public DateTime Fecha { get; set; }
         public string FichaEmpleado { get; set; }
+        public List<File> Files { get; set; }
     }
 }
