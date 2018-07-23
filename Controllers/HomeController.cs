@@ -18,8 +18,9 @@ namespace ExamenesMedicos.Controllers
             return View();
         }
 
-        public IActionResult Upload()
+        public IActionResult Upload(string e)
         {
+            ViewBag.Message = e;
             var db = new FileContext();
             var getTypes = db.MedicalExams
                 .Select(x => new SelectListItem()
@@ -57,17 +58,26 @@ namespace ExamenesMedicos.Controllers
                 Exam = exam,
                 Ficha = model.FichaEmpleado
             };
-            db.Files.Add(file);
-            db.SaveChanges();
 
-            Directory.CreateDirectory(path);
-
-            using (var stream = new FileStream(Path.Combine(path,fileName), FileMode.Create))
+            try
             {
-                await model.File.CopyToAsync(stream);
-            }
+                await db.Files.AddAsync(file);
+                await db.SaveChangesAsync();
 
-            return RedirectToAction("Upload");
+                Directory.CreateDirectory(path);
+
+                using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                {
+                    await model.File.CopyToAsync(stream);
+                }
+
+                return RedirectToAction("Upload", new { e = "Operacion realizada con exito." });
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Upload", new { e = $"Error al intentar subir el archivo: {ex.Message}"});
+            }
+            
         }
 
 
@@ -106,7 +116,10 @@ namespace ExamenesMedicos.Controllers
 
             model.Files = files;
             model.ItemsType = getTypes;
-
+            if (model.Files.Count == 0)
+            {
+                ViewBag.Message = "No hay archivos que coincidan con su busqueda.";
+            }
             return View(model);
         }
 
@@ -124,6 +137,32 @@ namespace ExamenesMedicos.Controllers
             }
             memory.Position = 0;
             return File(memory, "APPLICATION/octet-stream", name);
+        }
+
+        public IActionResult NewType(string e)
+        {
+            ViewBag.Message = e;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewType(MedicalExam model)
+        {
+            var db = new FileContext();
+            if (db.MedicalExams.FirstOrDefault(x => x.ExamName == model.ExamName) == null || !string.IsNullOrEmpty(model.ExamName))
+            {
+                try
+                {
+                    await db.MedicalExams.AddAsync(model);
+                    await db.SaveChangesAsync();
+                }
+                catch(Exception ex)
+                {
+                    return RedirectToAction(nameof(NewType), new { e = "Error al intentar registrar: "+ex.Message });
+                }
+                return RedirectToAction(nameof(Index), new { e = "Operacion realizada con exito." });
+            }
+            return RedirectToAction(nameof(NewType), new { e = "Error al intentar registrar." });
         }
 
         public IActionResult Error()

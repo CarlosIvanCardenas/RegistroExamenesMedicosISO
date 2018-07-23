@@ -4,12 +4,19 @@
     ViewData["Title"] = "Buscar Documento";
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script type="text/javascript">
+        alert('@ViewBag.Message');
+    </script>
+}
+
 <div class="container">
     <div class="page-header clearfix detailHeading">
         <h2>@ViewData["Title"]</h2>
     </div>
 </div>
-<br/>
+<br />
 <div class="container">
     <div class="jumbotron" style="padding-bottom:8%">
         <h3>Detalles: </h3>
@@ -22,7 +29,7 @@
                 </div>
                 <div class="form-group col-md-2">
                     <label for="fecha">Fecha: </label>
-                    <br/>
+                    <br />
                     <input id="fecha" asp-for="Fecha" type="date" value='@DateTime.Today.ToString("yyyy-MM-dd")' class="form-control">
                 </div>
                 <div class="form-group col-md-5">
@@ -33,7 +40,7 @@
             <div class="clearfix"></div>
             <br>
             <div class="form-group col-md-12">
-                <div style="text-align: center;" >
+                <div style="text-align: center;">
                     <button type="submit" class="btn btn-block btn-warning">Buscar</button>
                 </div>
             </div>
@@ -45,7 +52,7 @@
                 await Html.RenderPartialAsync("_SearchResults", Model.Files);
             }
         }
-       
+
     </div>
 </div>
 

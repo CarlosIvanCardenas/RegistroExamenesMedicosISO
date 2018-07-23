@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ElectronNET.API;
+using ElectronNET.API.Entities;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,27 @@ namespace ExamenesMedicos
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            if (HybridSupport.IsElectronActive)
+            {
+                ElectronBootstrap();
+            }
+        }
+
+        public async void ElectronBootstrap()
+        {
+            var browserWindow = await Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions
+            {
+                WebPreferences = new WebPreferences
+                {
+                    Plugins = true,
+                    AllowRunningInsecureContent = true
+                }
+            });
+
+            browserWindow.OnReadyToShow += () => browserWindow.Show();
+            browserWindow.Maximize();
+            browserWindow.SetTitle("Rebasa Examenes Medicos");
         }
     }
 }

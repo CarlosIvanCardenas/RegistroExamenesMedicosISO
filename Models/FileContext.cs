@@ -13,7 +13,7 @@ namespace ExamenesMedicos.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\ProjectsV13;Initial Catalog=DBExamenesMedicos;Integrated Security=True;Pooling=False;Connect Timeout=30");
+            optionsBuilder.UseSqlServer(@"Data Source=DCSERVER3;Initial Catalog=DBExamenMedico;Persist Security Info=True;User ID=sa;pwd=RBA550716*;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True");
         }
     }
 

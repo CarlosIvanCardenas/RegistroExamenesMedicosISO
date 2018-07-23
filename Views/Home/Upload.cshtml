@@ -3,23 +3,32 @@
     ViewData["Title"] = "Subir Documento";
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script type="text/javascript">
+        alert('@ViewBag.Message');
+    </script>
+}
+
 <style>
     body {
         font-family: Roboto, sans-serif;
     }
 
-    body.dragging::before {
-        content: "Arrastre el archivo a cualquier parte de la pagina.";
-        position: fixed;
-        left: 0; width: 100%;
-        top: 0; height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5em;
-        background-color: rgba(255, 255, 0, .3);
-        pointer-events: none;
-    }
+        body.dragging::before {
+            content: "Arrastre el archivo a cualquier parte de la pagina.";
+            position: fixed;
+            left: 0;
+            width: 100%;
+            top: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            background-color: rgba(255, 255, 0, .3);
+            pointer-events: none;
+        }
 
     button, input {
         font-family: inherit;
@@ -35,7 +44,7 @@
         <h2>@ViewData["Title"]</h2>
     </div>
 </div>
-<br/>
+<br />
 <div class="container">
     <div class="jumbotron" style="padding-bottom:8%">
         <h3>Detalles: </h3>
@@ -56,14 +65,14 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="file">Seleccione Documento: </label>
-                    <br/>
-                    <input id="file" type="file" asp-for="File" class="form-control-file" required/>
-                </div>    
+                    <br />
+                    <input id="file" type="file" asp-for="File" class="form-control-file" required />
+                </div>
             </div>
             <div class="clearfix"></div>
             <br>
             <div class="form-group col-md-12">
-                <div style="text-align: center;" >
+                <div style="text-align: center;">
                     <button type="submit" class="btn btn-block btn-warning">Guardar</button>
                 </div>
             </div>
@@ -73,7 +82,7 @@
 </div>
 
 <script type="text/javascript">
-    
+
     let target = document.documentElement;
     let body = document.body;
     let fileInput = document.getElementById("file");
@@ -90,7 +99,7 @@
     target.addEventListener('drop', (e) => {
         e.preventDefault();
         body.classList.remove('dragging');
-    
+
         fileInput.files = e.dataTransfer.files;
     });
 

@@ -34,6 +34,9 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Upload">Subir Documento</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Search">Buscar Documento</a></li>
                 </ul>
+                <form class="form-inline navbar-right">
+                    <input type="button" value="Registrar nuevo tipo de examen" onclick="location.href='@Url.Action("NewType", "Home")'" class="btn btn-success" style="margin-top: 9px" />
+                </form>
             </div>
         </div>
     </nav>

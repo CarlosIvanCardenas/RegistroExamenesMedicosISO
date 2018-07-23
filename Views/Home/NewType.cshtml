@@ -1,0 +1,39 @@
+﻿@model ExamenesMedicos.Models.MedicalExam
+@{
+    ViewData["Title"] = "Nuevo Exámen";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script type="text/javascript">
+        alert('@ViewBag.Message');
+    </script>
+}
+
+<div class="container">
+    <div class="page-header clearfix detailHeading">
+        <h2>Registrar nuevo tipo de exámen:</h2>
+    </div>
+</div>
+
+<div class="container">
+    <div class="jumbotron" style="padding-left:30%; padding-right:30%;">
+        <form method="post" autocomplete="off">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label for="input" class="form-label">Producto:</label>
+                    <input asp-for="ExamName" class="form-control" id="input" placeholder="Ingrese el nombre del exámen" required autofocus>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <center>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </center>
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
