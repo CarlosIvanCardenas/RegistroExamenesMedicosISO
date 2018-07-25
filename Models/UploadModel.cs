@@ -8,7 +8,9 @@ namespace ExamenesMedicos.Models
     {
         public List<SelectListItem> ItemsType { get; set; }
         public int IdType { get; set; }
+        public string Empresa { get; set; }
         public string FichaEmpleado { get; set; }
+        public string NombreEmpleado { get; set; }
         public IFormFile File { get; set; }
     }
 }

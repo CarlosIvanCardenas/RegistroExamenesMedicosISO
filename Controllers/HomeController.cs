@@ -56,7 +56,9 @@ namespace ExamenesMedicos.Controllers
                 FileName = fileName,
                 Date = DateTime.Today,
                 Exam = exam,
-                Ficha = model.FichaEmpleado
+                Ficha = model.FichaEmpleado,
+                EmployeeName = model.NombreEmpleado,
+                Company = model.Empresa
             };
 
             try
@@ -104,8 +106,25 @@ namespace ExamenesMedicos.Controllers
 
             var exam = db.MedicalExams.FirstOrDefault(x => x.Id == model.IdType);
             var date = model.Fecha;
-            var files = db.Files
-                .Where(x => x.Exam == exam && x.Date == date && x.Ficha == model.FichaEmpleado).ToList();
+            List<File> files;
+            if (date == DateTime.MinValue)
+            {
+               files = db.Files
+               .Where(x => x.Exam == exam &&
+                       x.Ficha == model.FichaEmpleado &&
+                       x.Company == model.Empresa &&
+                       x.EmployeeName == model.NombreEmpleado).ToList();
+            }
+            else
+            {
+               files = db.Files
+               .Where(x => x.Exam == exam &&
+                       x.Date == date &&
+                       x.Ficha == model.FichaEmpleado &&
+                       x.Company == model.Empresa &&
+                       x.EmployeeName == model.NombreEmpleado).ToList();
+            }
+           
 
             var getTypes = db.MedicalExams
                 .Select(x => new SelectListItem()

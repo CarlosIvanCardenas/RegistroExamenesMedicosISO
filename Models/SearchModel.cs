@@ -11,6 +11,8 @@ namespace ExamenesMedicos.Models
         public int IdType { get; set; }
         public DateTime Fecha { get; set; }
         public string FichaEmpleado { get; set; }
+        public string NombreEmpleado { get; set; }
+        public string Empresa { get; set; }
         public List<File> Files { get; set; }
     }
 }

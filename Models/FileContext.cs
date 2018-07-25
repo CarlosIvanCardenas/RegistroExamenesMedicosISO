@@ -25,6 +25,8 @@ namespace ExamenesMedicos.Models
         public MedicalExam Exam { get; set; }
         public DateTime Date { get; set; }
         public string Ficha { get; set; }
+        public string EmployeeName { get; set; }
+        public string Company { get; set; }
     }
 
     public class MedicalExam
